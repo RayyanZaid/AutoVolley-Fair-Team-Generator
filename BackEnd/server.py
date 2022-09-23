@@ -120,7 +120,7 @@ def sendResults():
 
     
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug = True) #debug will allow changes without shutting down the server 
+    app.run(host="0.0.0.0") #debug will allow changes without shutting down the server 
 
     # For local debugging, change to IPV4 address in quotes ex. "192.168.4.45"
     # For public launch, change to "0.0.0.0"
