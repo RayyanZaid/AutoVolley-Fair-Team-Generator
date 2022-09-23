@@ -5,7 +5,7 @@ import pandas as pd
 import mysql.connector
 from mysql.connector import Error
 from Player import Player
-import pymssql
+
 # def create_server_connection(host_name, user_name, user_password):
 #     connection = None
     
@@ -22,23 +22,23 @@ import pymssql
 # connection = create_server_connection("localhost", "root" , password)
 
 
-# def connect_to_database(host_name,username,user_password,db_name):
-#     connection = None
+def connect_to_database(host_name,username,user_password,db_name):
+    connection = None
 
-#     try:
-#         connection = mysql.connector.connect(
-#             host = host_name,
-#             user = username,
-#             password = user_password,
-#             database = db_name
-#         )
+    try:
+        connection = mysql.connector.connect(
+            host = host_name,
+            user = username,
+            password = user_password,
+            database = db_name
+        )
 
-#     except Error as err:
-#         print(f"Error {err}")
+    except Error as err:
+        print(f"Error {err}")
 
-#     return connection
+    return connection
 
-
+connection = connect_to_database("localhost","root",'',"volleyball")
 
 def query_executer(connection,query):
     cursor = connection.cursor()
@@ -52,14 +52,14 @@ def query_executer(connection,query):
 
 
 
-server = 'autovolleyserver.database.windows.net'
-database = 'AutoVolley'
-username = 'rayyaniscool'
-password = 'volleyballWITHTHEBOYS11#'
+# server = 'autovolleyserver.database.windows.net'
+# database = 'AutoVolley'
+# username = 'rayyaniscool'
+# password = 'volleyballWITHTHEBOYS11#'
 
 
-connection = pymssql.connect(server,username,password,database)
-cursor = connection.cursor()
+# connection = pymssql.connect(server,username,password,database)
+# cursor = connection.cursor()
 
 
 # Connected to database (if the preceding lines work)

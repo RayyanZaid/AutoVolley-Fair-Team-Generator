@@ -94,7 +94,7 @@ class NewPlayerPageState extends State<NewPlayerPage> {
 
                 //url to send the post request to
                 // ignore: prefer_const_declarations
-                final url = globals.localURL + '/addNewPlayer';
+                final url = 'http://192.168.4.45:5000/addNewPlayer';
                 /*
               A Uri object is usually used to tell a ContentProvider what 
               we want to access by reference. It is an immutable one-to-one 

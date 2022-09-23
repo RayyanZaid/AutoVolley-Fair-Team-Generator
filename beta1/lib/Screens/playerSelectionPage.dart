@@ -134,7 +134,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
             //   debugPrint(playersPlaying[i]);
             // }
 
-            final url = globals.localURL + '/createTeams';
+            final url = 'http://192.168.4.45:5000/createTeams';
             final response = await http.post(Uri.parse(url),
                 body: json.encode({'playersPlaying': playersPlaying}));
 

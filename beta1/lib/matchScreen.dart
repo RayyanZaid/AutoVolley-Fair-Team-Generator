@@ -85,7 +85,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     String alert;
     var bgColor = Color.fromARGB(255, 9, 155, 82);
     globals.team1Won = true;
-    final url = globals.localURL + '/sendResults';
+    final url = 'http://192.168.4.45:5000/sendResults';
     final response;
     if (index == 0) {
       alert = "Team 1 Won!!";
@@ -238,7 +238,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             String alert;
                             var bgColor = Color.fromARGB(255, 60, 186, 232);
                             globals.team1Won = true;
-                            final url = globals.localURL + '/sendResults';
+                            final url = 'http://192.168.4.45:5000/sendResults';
                             final response;
 
                             alert = "Team 1 Won!!";
@@ -294,7 +294,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             String alert;
                             var bgColor = Color.fromARGB(255, 235, 123, 101);
 
-                            final url = globals.localURL + '/sendResults';
+                            final url = 'http://192.168.4.45:5000/sendResults';
                             final response;
                             alert = "Team 2 Won!!";
                             globals.team1Won = false;
@@ -349,7 +349,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                           alignment: Alignment.center,
                           child: ListTile(
                             title: player.buildTitle(context),
-                            // subtitle: player.buildSubtitle(context),
+                            subtitle: player.buildSubtitle(context),
                           ),
                         )
                       ]);
@@ -367,7 +367,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                           alignment: Alignment.center,
                           child: ListTile(
                             title: player.buildTitle(context),
-                            // subtitle: player.buildSubtitle(context),
+                            subtitle: player.buildSubtitle(context),
                           ),
                         )
                       ]);
@@ -384,7 +384,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             alignment: Alignment.center,
                             child: ListTile(
                               title: player.buildTitle(context),
-                              // subtitle: player.buildSubtitle(context),
+                              subtitle: player.buildSubtitle(context),
                             ),
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 60, 186, 232),
@@ -410,7 +410,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             alignment: Alignment.center,
                             child: ListTile(
                               title: player.buildTitle(context),
-                              // subtitle: player.buildSubtitle(context),
+                              subtitle: player.buildSubtitle(context),
                             ),
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 60, 186, 232),
@@ -434,7 +434,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             alignment: Alignment.center,
                             child: ListTile(
                               title: player.buildTitle(context),
-                              // subtitle: player.buildSubtitle(context),
+                              subtitle: player.buildSubtitle(context),
                             ),
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 60, 186, 232),
@@ -458,7 +458,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             alignment: Alignment.center,
                             child: ListTile(
                               title: player.buildTitle(context),
-                              // subtitle: player.buildSubtitle(context),
+                              subtitle: player.buildSubtitle(context),
                             ),
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 235, 123, 101),
@@ -485,7 +485,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             alignment: Alignment.center,
                             child: ListTile(
                               title: player.buildTitle(context),
-                              // subtitle: player.buildSubtitle(context),
+                              subtitle: player.buildSubtitle(context),
                             ),
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 235, 123, 101),
@@ -509,7 +509,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             alignment: Alignment.center,
                             child: ListTile(
                               title: player.buildTitle(context),
-                              // subtitle: player.buildSubtitle(context),
+                              subtitle: player.buildSubtitle(context),
                             ),
                             decoration: BoxDecoration(
                                 color: Color.fromARGB(255, 235, 123, 101),
@@ -525,7 +525,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
 
                 return ListTile(
                   title: player.buildTitle(context),
-                  // subtitle: player.buildSubtitle(context),
+                  subtitle: player.buildSubtitle(context),
                 );
               },
             )),

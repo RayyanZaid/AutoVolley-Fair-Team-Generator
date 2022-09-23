@@ -23,10 +23,10 @@ var playerStatWPS;
 // var localURL = 'https://autovolley.azurewebsites.net';
 
 // Working server
-var localURL = 'https://rayyanzaid.azurewebsites.net';
+// var localURL = 'http://0.0.0.0:5000';
 
 // For testing
-// var localURL = 'http://192.168.4.45:5000';
+var localURL = 'http://192.168.4.45:5000';
 
 // To Test right before pushing to Azure
 // var localURL = "http://172.17.0.2:5000";
