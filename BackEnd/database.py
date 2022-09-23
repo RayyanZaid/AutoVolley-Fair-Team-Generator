@@ -1,7 +1,3 @@
-from sqlite3 import connect
-from tokenize import Double
-from venv import create
-import pandas as pd
 import mysql.connector
 from mysql.connector import Error
 from Player import Player
