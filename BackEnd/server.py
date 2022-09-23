@@ -24,6 +24,11 @@ app = Flask(__name__) #instance of our flask application
 
 
 #Route '/' to facilitate get request from our flutter app
+
+@app.route('/', methods = ['GET','POST'])
+def index():
+    return jsonify({'Welcome' : "Volleyball Project"})
+
 @app.route('/addNewPlayer', methods = ['GET','POST'])
 def add():
     global response
