@@ -138,7 +138,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                     selected: _selectedOption == index - 1,
                     onTap: () async {
                       final url =
-                          'http://192.168.4.45:5000/sendPlayersToFrontEnd';
+                          'https://rayyanzaid.azurewebsites.net/sendPlayersToFrontEnd';
                       final response = await http.post(Uri.parse(url));
                       final decoded =
                           json.decode(response.body) as Map<String, dynamic>;
@@ -184,7 +184,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                     ),
                     selected: _selectedOption == index - 1,
                     onTap: () async {
-                      final url = 'http://192.168.4.45:5000/sendPlayerStats';
+                      final url = 'https://rayyanzaid.azurewebsites.net/sendPlayerStats';
                       final response = await http.post(Uri.parse(url));
                       final decoded =
                           json.decode(response.body) as Map<String, dynamic>;

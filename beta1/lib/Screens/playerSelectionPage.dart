@@ -50,15 +50,13 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
         title: const Text('Choose who will play'),
       ),
       body: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            alignment: Alignment.topCenter,
-            fit: BoxFit.fill,
-            image: NetworkImage(
-              'https://source.unsplash.com/oiZ01CsGX4o',
-            ),
-          ),
+            image: AssetImage("assets/b2.jpeg"), fit: BoxFit.cover
+          )
         ),
+        alignment: Alignment.bottomCenter,
         child: ListView.builder(
           itemCount: playerListLocal.length,
           itemBuilder: (BuildContext context, int index) {
@@ -89,7 +87,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
                                         style: const TextStyle(
                                             color: Colors.black, fontSize: 20)),
                                     decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 225, 236, 241),
+                                      color: Color.fromARGB(255, 62, 157, 239),
                                     )),
                               ),
                               GestureDetector(
@@ -134,7 +132,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
             //   debugPrint(playersPlaying[i]);
             // }
 
-            final url = 'http://192.168.4.45:5000/createTeams';
+            final url = 'https://rayyanzaid.azurewebsites.net/createTeams';
             final response = await http.post(Uri.parse(url),
                 body: json.encode({'playersPlaying': playersPlaying}));
 

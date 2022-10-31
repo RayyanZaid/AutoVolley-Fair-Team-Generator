@@ -47,12 +47,8 @@ class NewPlayerPageState extends State<NewPlayerPage> {
         width: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            alignment: Alignment.topCenter,
-            fit: BoxFit.fill,
-            image: NetworkImage(
-              'https://source.unsplash.com/igpV55ldAKE',
-            ),
-          ),
+            image: AssetImage("assets/background1.jpeg"), fit: BoxFit.cover
+          )
         ),
         alignment: Alignment.bottomCenter,
         child: Column(
@@ -94,7 +90,7 @@ class NewPlayerPageState extends State<NewPlayerPage> {
 
                 //url to send the post request to
                 // ignore: prefer_const_declarations
-                final url = 'http://192.168.4.45:5000/addNewPlayer';
+                final url = 'https://rayyanzaid.azurewebsites.net/addNewPlayer';
                 /*
               A Uri object is usually used to tell a ContentProvider what 
               we want to access by reference. It is an immutable one-to-one 

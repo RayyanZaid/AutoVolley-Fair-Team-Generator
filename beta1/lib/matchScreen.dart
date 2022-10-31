@@ -85,7 +85,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     String alert;
     var bgColor = Color.fromARGB(255, 9, 155, 82);
     globals.team1Won = true;
-    final url = 'http://192.168.4.45:5000/sendResults';
+    final url = 'https://rayyanzaid.azurewebsites.net/sendResults';
     final response;
     if (index == 0) {
       alert = "Team 1 Won!!";
@@ -238,7 +238,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             String alert;
                             var bgColor = Color.fromARGB(255, 60, 186, 232);
                             globals.team1Won = true;
-                            final url = 'http://192.168.4.45:5000/sendResults';
+                            final url = 'https://rayyanzaid.azurewebsites.net/sendResults';
                             final response;
 
                             alert = "Team 1 Won!!";
@@ -294,7 +294,7 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             String alert;
                             var bgColor = Color.fromARGB(255, 235, 123, 101);
 
-                            final url = 'http://192.168.4.45:5000/sendResults';
+                            final url = 'https://rayyanzaid.azurewebsites.net/sendResults';
                             final response;
                             alert = "Team 2 Won!!";
                             globals.team1Won = false;
