@@ -2,6 +2,12 @@ import mysql.connector
 from mysql.connector import Error
 from Player import Player
 import pymssql
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 # def create_server_connection(host_name, user_name, user_password):
 #     connection = None
     
@@ -48,10 +54,10 @@ def query_executer(connection,query):
 
 
 
-server = 'autovolleyserver.database.windows.net'
-database = 'AutoVolley'
-username = 'rayyaniscool'
-password = 'volleyballWITHTHEBOYS11#'
+server = os.getenv('server')
+database = os.getenv('database')
+username = os.getenv('username')
+password = os.getenv('password')
 
 
 connection = pymssql.connect(server,username,password,database)
