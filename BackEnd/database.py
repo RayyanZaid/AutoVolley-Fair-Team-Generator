@@ -2,11 +2,9 @@ import mysql.connector
 from mysql.connector import Error
 from Player import Player
 import pymssql
-
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 # def create_server_connection(host_name, user_name, user_password):
 #     connection = None
