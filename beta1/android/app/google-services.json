@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "381771283279",
+    "firebase_url": "https://autovolley-85d29-default-rtdb.firebaseio.com",
+    "project_id": "autovolley-85d29",
+    "storage_bucket": "autovolley-85d29.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381771283279:android:6ff0d083c0698f1cb1e33a",
+        "android_client_info": {
+          "package_name": "com.example.beta1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381771283279-t07rcqh2i4p1t5u581klbaueeusqjqb8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7LR1UxHslOMlYyNi2Kb4ZDuQgUW18dxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381771283279-t07rcqh2i4p1t5u581klbaueeusqjqb8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "381771283279-k0eeere05ke91lhqisn93kg0rhaucrnv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.beta1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

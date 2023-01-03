@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>381771283279-k0eeere05ke91lhqisn93kg0rhaucrnv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.381771283279-k0eeere05ke91lhqisn93kg0rhaucrnv</string>
+	<key>API_KEY</key>
+	<string>AIzaSyByDSi2WNx1R7b_I3FSpNHdbiX05BtXNZg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>381771283279</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.beta1</string>
+	<key>PROJECT_ID</key>
+	<string>autovolley-85d29</string>
+	<key>STORAGE_BUCKET</key>
+	<string>autovolley-85d29.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:381771283279:ios:edbac5ca0e566d53b1e33a</string>
+	<key>DATABASE_URL</key>
+	<string>https://autovolley-85d29-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

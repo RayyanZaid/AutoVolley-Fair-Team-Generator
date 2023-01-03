@@ -8,6 +8,14 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'welcome_screen.dart';
 
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'dart:io';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+
 class NewPlayerPage extends StatefulWidget {
   NewPlayerPage({Key? key, required this.title}) : super(key: key);
 
@@ -23,6 +31,46 @@ OutlineInputBorder _inputformdeco() {
     borderSide:
         BorderSide(width: 2.0, color: Colors.black, style: BorderStyle.solid),
   );
+}
+
+Future<bool> doesExist(String name) async {
+  http.Response response = await http.get(
+    Uri.parse(
+        'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json'),
+  );
+
+  try {
+    Map<String, dynamic> data = json.decode(response.body);
+  } catch (e) {
+    debugPrint("Does not exist");
+    return false;
+  }
+
+  return true;
+}
+
+void addNewPlayer(String name, Map<String, dynamic> data) async {
+  HttpClient client = HttpClient();
+
+  try {
+    // Encode the data as a JSON string
+    String dataString = json.encode(data);
+
+    // Send an HTTP PATCH request to the document's URL with the new data in the request body
+    http.Response response = await http.patch(
+        Uri.parse(
+            'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json'),
+        body: dataString);
+
+    // Check the status code of the response
+    if (response.statusCode == 200) {
+      debugPrint('Data set successfully');
+    } else {
+      debugPrint('Error setting data: ${response.statusCode}');
+    }
+  } catch (e) {
+    debugPrint('Error: $e');
+  }
 }
 
 class NewPlayerPageState extends State<NewPlayerPage> {
@@ -46,10 +94,9 @@ class NewPlayerPageState extends State<NewPlayerPage> {
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/background1.jpeg"), fit: BoxFit.cover
-          )
-        ),
+            image: DecorationImage(
+                image: AssetImage("assets/background1.jpeg"),
+                fit: BoxFit.cover)),
         alignment: Alignment.bottomCenter,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,9 +135,17 @@ class NewPlayerPageState extends State<NewPlayerPage> {
                 //validating the form and saving it
                 _savingData();
 
+                bool docExists = await doesExist(name);
+
+                if (!docExists) {
+                  addNewPlayer(name, {'wins': 0, 'losses': 0, 'ratio': 0});
+                } else {
+                  debugPrint("DOC EXISTS");
+                }
+
                 //url to send the post request to
                 // ignore: prefer_const_declarations
-                final url = 'https://rayyanzaid.azurewebsites.net/addNewPlayer';
+
                 /*
               A Uri object is usually used to tell a ContentProvider what 
               we want to access by reference. It is an immutable one-to-one 
@@ -98,34 +153,35 @@ class NewPlayerPageState extends State<NewPlayerPage> {
               creates a new Uri object from a properly formated String
               */
                 //sending a post request to the url
-                bool isTaken = false;
-                final response = await http.post(Uri.parse(url),
-                    body: json.encode({'name': name, 'isTaken': isTaken}));
-                final decoded =
-                    json.decode(response.body) as Map<String, dynamic>;
-                var nameFromBackEnd = decoded['name'];
-                bool isTakenFromBackEnd = decoded['isTaken'];
-                var responseMessage =
-                    nameFromBackEnd + " has been added as a player";
-                var alert = "Success!!";
-                var bgColor = Color.fromARGB(255, 42, 185, 42);
-                if (isTakenFromBackEnd == true) {
-                  responseMessage = "The name " +
-                      nameFromBackEnd +
-                      " has been taken. Enter another name.";
-                  alert = "Failed!!";
-                  bgColor = Color.fromARGB(255, 230, 128, 128);
-                }
+                // bool isTaken = false;
+                // final response = await http.post(Uri.parse(url),
+                //     body: json.encode({'name': name, 'isTaken': isTaken}));
+                // final decoded =
+                //     json.decode(response.body) as Map<String, dynamic>;
+                // var nameFromBackEnd = decoded['name'];
+                // bool isTakenFromBackEnd = decoded['isTaken'];
 
-                // ignore: use_build_context_synchronously
-                _showDialog(context, responseMessage, alert, bgColor);
-                await Future.delayed(const Duration(seconds: 2), () {});
+                // var responseMessage =
+                //     nameFromBackEnd + " has been added as a player";
+                // var alert = "Success!!";
+                // var bgColor = Color.fromARGB(255, 42, 185, 42);
+                // if (isTakenFromBackEnd == true) {
+                //   responseMessage = "The name " +
+                //       nameFromBackEnd +
+                //       " has been taken. Enter another name.";
+                //   alert = "Failed!!";
+                //   bgColor = Color.fromARGB(255, 230, 128, 128);
+                // }
 
-                if (alert == "Success!!") {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return MenuOptionsScreen();
-                  }));
-                }
+                // // ignore: use_build_context_synchronously
+                // _showDialog(context, responseMessage, alert, bgColor);
+                // await Future.delayed(const Duration(seconds: 2), () {});
+
+                // if (alert == "Success!!") {
+                //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                //     return MenuOptionsScreen();
+                //   }));
+                // }
               },
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),

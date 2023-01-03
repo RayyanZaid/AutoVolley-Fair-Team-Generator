@@ -52,10 +52,8 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/b2.jpeg"), fit: BoxFit.cover
-          )
-        ),
+            image: DecorationImage(
+                image: AssetImage("assets/b2.jpeg"), fit: BoxFit.cover)),
         alignment: Alignment.bottomCenter,
         child: ListView.builder(
           itemCount: playerListLocal.length,
