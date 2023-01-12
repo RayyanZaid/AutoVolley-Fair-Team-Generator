@@ -151,12 +151,22 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                     ),
                     selected: _selectedOption == index - 1,
                     onTap: () async {
-                      final url =
-                          'https://rayyanzaid.azurewebsites.net/sendPlayersToFrontEnd';
-                      final response = await http.post(Uri.parse(url));
-                      final decoded =
-                          json.decode(response.body) as Map<String, dynamic>;
-                      globals.playerList = decoded['list'];
+                      globals.playerList = [];
+
+                      http.Response response = await http.get(
+                        Uri.parse(
+                            'https://autovolley-85d29-default-rtdb.firebaseio.com/players.json'),
+                      );
+
+                      try {
+                        Map<String, dynamic> data = json.decode(response.body);
+
+                        for (String key in data.keys) {
+                          globals.playerList.add(key);
+                        }
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return PlayerSelectionPage(title: 'Player Selection');
@@ -209,7 +219,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
 
                       try {
                         Map<String, dynamic> data = json.decode(response.body);
-                        globals.playerList = data;
+
                         for (String key in data.keys) {
                           globals.playerStatsNames.add(key);
                           globals.playerStatWins.add(data[key]['wins']);
