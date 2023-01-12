@@ -127,35 +127,36 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
           onPressed: () async {
             List<String> playersPlaying = getPlayers();
 
-            // for loop just for debugging
-            // for (int i = 0; i < playersPlaying.length; i++) {
-            //   debugPrint(playersPlaying[i]);
+            for (int i = 0; i < playersPlaying.length; i++) {
+              debugPrint(playersPlaying[i]);
+            }
+
+            // Azure
+
+            // final url = 'https://rayyanzaid.azurewebsites.net/createTeams';
+            // final response = await http.post(Uri.parse(url),
+            //     body: json.encode({'playersPlaying': playersPlaying}));
+
+            // // player objects from the backend
+            // final decoded = json.decode(response.body) as Map<String, dynamic>;
+
+            // List<dynamic> team1Names = decoded['team1Names'];
+            // List<dynamic> team1WLRatios = decoded['team1WLRatios'];
+            // globals.team1Names = team1Names;
+            // globals.team1WLRatios = team1WLRatios;
+
+            // for (int i = 0; i < team1Names.length; i++) {
+            //   debugPrint(team1Names[i].toString());
             // }
 
-            final url = 'https://rayyanzaid.azurewebsites.net/createTeams';
-            final response = await http.post(Uri.parse(url),
-                body: json.encode({'playersPlaying': playersPlaying}));
+            // List<dynamic> team2Names = decoded['team2Names'];
+            // List<dynamic> team2WLRatios = decoded['team2WLRatios'];
+            // globals.team2Names = team2Names;
+            // globals.team2WLRatios = team2WLRatios;
 
-            // player objects from the backend
-            final decoded = json.decode(response.body) as Map<String, dynamic>;
-
-            List<dynamic> team1Names = decoded['team1Names'];
-            List<dynamic> team1WLRatios = decoded['team1WLRatios'];
-            globals.team1Names = team1Names;
-            globals.team1WLRatios = team1WLRatios;
-
-            for (int i = 0; i < team1Names.length; i++) {
-              debugPrint(team1Names[i].toString());
-            }
-
-            List<dynamic> team2Names = decoded['team2Names'];
-            List<dynamic> team2WLRatios = decoded['team2WLRatios'];
-            globals.team2Names = team2Names;
-            globals.team2WLRatios = team2WLRatios;
-
-            for (int i = 0; i < team2Names.length; i++) {
-              debugPrint(team2Names[i].toString());
-            }
+            // for (int i = 0; i < team2Names.length; i++) {
+            //   debugPrint(team2Names[i].toString());
+            // }
 
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return MatchScreenPage(
