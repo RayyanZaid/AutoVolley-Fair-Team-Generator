@@ -1,6 +1,6 @@
 library my_prj.globals;
 
-var playerList;
+var playerList = [];
 var playersPlaying;
 
 List<dynamic> team1Names = [];
