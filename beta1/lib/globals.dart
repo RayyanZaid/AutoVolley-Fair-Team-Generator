@@ -14,10 +14,10 @@ final updatedLosing = List<String>.generate(22, (int index) => '');
 
 bool team1Won = true;
 
-var playerStatsNames;
-var playerStatWins;
-var playerStatLosses;
-var playerStatWPS;
+var playerStatsNames = [];
+var playerStatWins = [];
+var playerStatLosses = [];
+var playerStatWPS = [];
 
 // Old server
 // var localURL = 'https://autovolley.azurewebsites.net';

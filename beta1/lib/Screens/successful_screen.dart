@@ -15,6 +15,18 @@ class MenuOptionsScreen extends StatefulWidget {
   _MenuOptionsScreenState createState() => _MenuOptionsScreenState();
 }
 
+List<dynamic> sortList(List<dynamic> parent, List<dynamic> child) {
+  parent = parent.map((item) => double.parse(item)).toList();
+  List<dynamic> sortedRatios = List.from(parent)..sort();
+
+  var childValues = Map.fromIterables(child, parent);
+
+  var sortedChildValues = Map.fromEntries(
+      childValues.entries.toList()..sort((a, b) => a.value.compareTo(b.value)));
+  List<dynamic> sortedChild = sortedChildValues.keys.toList();
+  return sortedChild;
+}
+
 class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
   int _selectedOption = 5;
 
@@ -186,15 +198,35 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                     ),
                     selected: _selectedOption == index - 1,
                     onTap: () async {
-                      final url =
-                          'https://rayyanzaid.azurewebsites.net/sendPlayerStats';
-                      final response = await http.post(Uri.parse(url));
-                      final decoded =
-                          json.decode(response.body) as Map<String, dynamic>;
-                      globals.playerStatsNames = decoded['names'];
-                      globals.playerStatWins = decoded['wins'];
-                      globals.playerStatLosses = decoded['losses'];
-                      globals.playerStatWPS = decoded['WinPercentage'];
+                      globals.playerStatsNames = [];
+                      globals.playerStatWPS = [];
+                      globals.playerStatLosses = [];
+                      globals.playerStatWins = [];
+                      http.Response response = await http.get(
+                        Uri.parse(
+                            'https://autovolley-85d29-default-rtdb.firebaseio.com/players.json'),
+                      );
+
+                      try {
+                        Map<String, dynamic> data = json.decode(response.body);
+                        globals.playerList = data;
+                        for (String key in data.keys) {
+                          globals.playerStatsNames.add(key);
+                          globals.playerStatWins.add(data[key]['wins']);
+                          globals.playerStatLosses.add(data[key]['losses']);
+                          globals.playerStatWPS.add(data[key]['ratio']);
+                        }
+
+                        // sortList(
+                        //     globals.playerStatWPS, globals.playerStatsNames);
+
+                        // sortList(globals.playerStatWPS, globals.playerStatWins);
+                        // sortList(
+                        //     globals.playerStatWPS, globals.playerStatLosses);
+                      } catch (e) {
+                        debugPrint(e.toString());
+                      }
+
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return PlayerStatsPage(title: 'Player Stats');
