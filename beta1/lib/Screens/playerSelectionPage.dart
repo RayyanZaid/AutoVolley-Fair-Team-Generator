@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
 
@@ -20,6 +22,25 @@ class Player {
   String strPlayerName;
   var isChosen = false;
   Player(this.strPlayerName);
+
+  // getters
+
+}
+
+Future<Map<String, dynamic>> returnStats(String name) async {
+  http.Response response = await http.get(
+    Uri.parse(
+        'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json'),
+  );
+
+  Map<String, dynamic> data = json.decode(response.body);
+
+  return data;
+}
+
+double getPlayerWorth(int wins, int losses, double ratio) {
+  double worth = ratio * (1 + ((wins - losses) / 25)) + ((wins + losses) / 200);
+  return worth;
 }
 
 List<Player> createButtons() {
@@ -92,6 +113,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
                               ),
                               GestureDetector(
                                 onTap: () {
+                                  debugPrint("Selected");
                                   setState(() {
                                     playerListLocal[index].isChosen =
                                         !playerListLocal[index].isChosen;
@@ -127,9 +149,50 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
           onPressed: () async {
             List<String> playersPlaying = getPlayers();
 
+            // for (int i = 0; i < playersPlaying.length; i++) {
+            //   debugPrint(playersPlaying[i]);
+            // }
+
+            // Send playersPlaying to Firebase to get the player's WL Ratios
+
+            Map<String, dynamic> playerToStats = {};
+
             for (int i = 0; i < playersPlaying.length; i++) {
-              debugPrint(playersPlaying[i]);
+              Map<String, dynamic> eachPlayer =
+                  await returnStats(playersPlaying[i]);
+              playerToStats[playersPlaying[i]] = eachPlayer;
             }
+
+            debugPrint(playerToStats.toString());
+
+            // Create Algorithm to determine player's worth
+
+            for (int i = 0; i < playersPlaying.length; i++) {
+              int wins = playerToStats[playersPlaying[i]]["wins"];
+              int losses = playerToStats[playersPlaying[i]]["losses"];
+              double ratio = double.parse(
+                  playerToStats[playersPlaying[i]]["ratio"].toString());
+              debugPrint(playerToStats[playersPlaying[i]]["ratio"].toString());
+              double worth = getPlayerWorth(wins, losses, ratio);
+
+              playerToStats[playersPlaying[i]]["worth"] = worth;
+            }
+
+            // Put it into team creater algorithm
+
+            // 1. Sort by worth
+
+            List<String> keys = playerToStats.keys.toList();
+
+// Sort the list of keys based on the values of the inner map
+            keys.sort((k1, k2) => playerToStats[k1]['worth']
+                .compareTo(playerToStats[k2]['worth']));
+
+// Create a new map from the sorted keys
+            Map<String, Map<String, dynamic>> sortedMap = Map.fromIterable(keys,
+                key: (k) => k, value: (k) => playerToStats[k]);
+            debugPrint(sortedMap.toString());
+            // Return 2 lists (one for each team)
 
             // Azure
 

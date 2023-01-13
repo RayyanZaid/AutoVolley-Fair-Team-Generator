@@ -138,7 +138,7 @@ class NewPlayerPageState extends State<NewPlayerPage> {
                 bool docExists = await doesExist(name);
 
                 if (!docExists) {
-                  addNewPlayer(name, {'wins': 0, 'losses': 0, 'ratio': 0});
+                  addNewPlayer(name, {'wins': 0, 'losses': 0, 'ratio': 0.0});
                 } else {
                   debugPrint("DOC EXISTS");
                 }

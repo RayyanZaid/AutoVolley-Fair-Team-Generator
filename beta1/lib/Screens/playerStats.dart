@@ -26,6 +26,42 @@ class Player {
   String losses;
   String wps;
   Player(this.strPlayerName, this.wins, this.losses, this.wps);
+// switched order of < and > so that quicksort would work in reverse
+  bool operator <(Player other) {
+    return double.parse(wps) > double.parse(other.wps);
+  }
+
+  bool operator >(Player other) {
+    return double.parse(wps) < double.parse(other.wps);
+  }
+}
+
+void quickSort(List<Player> arr, int low, int high) {
+  if (low < high) {
+    int pivotIndex = partition(arr, low, high);
+    quickSort(arr, low, pivotIndex);
+    quickSort(arr, pivotIndex + 1, high);
+  }
+}
+
+int partition(List<Player> arr, int low, int high) {
+  Player pivot = arr[low];
+  int i = low - 1;
+  int j = high + 1;
+  while (true) {
+    do {
+      i++;
+    } while (arr[i] < pivot);
+    do {
+      j--;
+    } while (arr[j] > pivot);
+    if (i >= j) {
+      return j;
+    }
+    Player temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
 }
 
 List<Player> createButtons() {
@@ -40,6 +76,8 @@ List<Player> createButtons() {
         globals.playerStatWPS[i].toString());
     players.add(eachPlayer);
   }
+
+  quickSort(players, 1, players.length - 1);
 
   return players;
 }
