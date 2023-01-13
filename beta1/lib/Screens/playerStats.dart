@@ -73,7 +73,7 @@ List<Player> createButtons() {
         globals.playerStatsNames[i].toString(),
         globals.playerStatWins[i].toString(),
         globals.playerStatLosses[i].toString(),
-        globals.playerStatWPS[i].toString());
+        (globals.playerStatWPS[i] * 100).toString());
     players.add(eachPlayer);
   }
 
@@ -177,7 +177,7 @@ class PlayerStatsPageState extends State<PlayerStatsPage> {
                                           height: 40.0,
                                           alignment: Alignment.center,
                                           child: Text(
-                                              playerListLocal[index].wps,
+                                              "${playerListLocal[index].wps}%",
                                               textAlign: TextAlign.center,
                                               style: const TextStyle(
                                                   color: Color.fromARGB(
