@@ -163,8 +163,6 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
               playerToStats[playersPlaying[i]] = eachPlayer;
             }
 
-            debugPrint(playerToStats.toString());
-
             // Create Algorithm to determine player's worth
 
             for (int i = 0; i < playersPlaying.length; i++) {
@@ -172,7 +170,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
               int losses = playerToStats[playersPlaying[i]]["losses"];
               double ratio = double.parse(
                   playerToStats[playersPlaying[i]]["ratio"].toString());
-              debugPrint(playerToStats[playersPlaying[i]]["ratio"].toString());
+
               double worth = getPlayerWorth(wins, losses, ratio);
 
               playerToStats[playersPlaying[i]]["worth"] = worth;
@@ -191,8 +189,52 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
 // Create a new map from the sorted keys
             Map<String, Map<String, dynamic>> sortedMap = Map.fromIterable(keys,
                 key: (k) => k, value: (k) => playerToStats[k]);
-            debugPrint(sortedMap.toString());
+            // debugPrint(sortedMap.toString());
             // Return 2 lists (one for each team)
+            globals.team1Names = [];
+            globals.team2Names = [];
+            globals.team1WLRatios = [];
+            globals.team2WLRatios = [];
+
+            for (int i = 0; i < sortedMap.length ~/ 4; i++) {
+              globals.team1Names.add(sortedMap.keys.elementAt(i));
+              globals.team1Names
+                  .add(sortedMap.keys.elementAt(sortedMap.length - i - 1));
+              globals.team1WLRatios
+                  .add(sortedMap[sortedMap.keys.elementAt(i)]!["worth"]);
+              globals.team1WLRatios.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length - i - 1)]!["ratio"]);
+            }
+
+            if (sortedMap.length % 2 == 1) {
+              globals.team1Names
+                  .add(sortedMap.keys.elementAt(sortedMap.length ~/ 2));
+              globals.team1WLRatios.add(sortedMap[
+                  sortedMap.keys.elementAt(sortedMap.length ~/ 2)]!["ratio"]);
+            }
+
+            for (int i = sortedMap.length ~/ 4;
+                i < sortedMap.length ~/ 2;
+                i++) {
+              if (sortedMap.length % 2 == 0 &&
+                  i == sortedMap.length ~/ 2 - 1 &&
+                  sortedMap.length % 4 != 0) {
+                globals.team1Names.add(sortedMap.keys.elementAt(i));
+                globals.team1WLRatios
+                    .add(sortedMap[sortedMap.keys.elementAt(i)]!["ratio"]);
+              } else {
+                globals.team2Names.add(sortedMap.keys.elementAt(i));
+                globals.team2WLRatios
+                    .add(sortedMap[sortedMap.keys.elementAt(i)]!["ratio"]);
+              }
+              globals.team2Names
+                  .add(sortedMap.keys.elementAt(sortedMap.length - i - 1));
+              globals.team2WLRatios.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length - i - 1)]!["ratio"]);
+            }
+
+            debugPrint(globals.team1Names.toString());
+            debugPrint(globals.team2Names.toString());
 
             // Azure
 
