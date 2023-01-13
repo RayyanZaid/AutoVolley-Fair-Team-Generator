@@ -192,7 +192,6 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
             Map<String, Map<String, dynamic>> sortedMap = Map.fromIterable(keys,
                 key: (k) => k, value: (k) => playerToStats[k]);
             debugPrint(sortedMap.toString());
-
             // Return 2 lists (one for each team)
 
             // Azure
