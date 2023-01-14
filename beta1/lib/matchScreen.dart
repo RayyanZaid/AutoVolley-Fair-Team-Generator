@@ -208,9 +208,8 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     teams.add(HeadingItem(''));
     for (int i = 0; i < globals.team1Names.length; i++) {
       String eachName = globals.team1Names[i];
-      String winP = ('Win%: ' +
-          (globals.team1Stats[eachName]["winPercentage"] * 100).toString() +
-          "%");
+      double unrounded = globals.team1Stats[eachName]["winPercentage"] * 100;
+      String winP = ('Win%: ' + unrounded.roundToDouble().toString() + "%");
       teams.add(MessageItem(eachName, winP));
     }
     teams.add(HeadingItem(''));
@@ -223,9 +222,8 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     teams.add(HeadingItem(''));
     for (int i = 0; i < globals.team2Names.length; i++) {
       String eachName = globals.team2Names[i];
-      String winP = ('Win%: ' +
-          (globals.team2Stats[eachName]["winPercentage"] * 100).toString() +
-          "%");
+      double unrounded = globals.team2Stats[eachName]["winPercentage"] * 100;
+      String winP = ('Win%: ' + unrounded.roundToDouble().toString() + "%");
       teams.add(MessageItem(eachName, winP));
     }
     // if (globals.updatedWinning.isNotEmpty) {
@@ -342,6 +340,8 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                               String name = globals.team2Names[i];
                               updateDataTeam2(name, true);
                             }
+                            _showDialog(
+                                context, responseMessage, alert, bgColor);
                           },
                           icon: Icon(
                             Icons.ads_click_rounded,

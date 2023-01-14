@@ -67,7 +67,7 @@ flutter:
     - assets/b2.jpeg
     - assets/wood.jpg
     - assets/lightBG.jpg
-    
+    - assets/button.jpg
     
   # To add assets to your application, add an assets section, like this:
   # assets:

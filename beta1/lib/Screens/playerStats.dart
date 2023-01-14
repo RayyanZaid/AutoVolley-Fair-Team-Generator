@@ -82,11 +82,13 @@ List<Player> createButtons() {
   Player first = Player('Name', 'Wins', 'Losses', 'Win Percentage');
   players.add(first);
   for (int i = 0; i < globals.playerStatsNames.length; i++) {
+    double unrounded = globals.playerStatWPS[i] * 100;
+    String winP = ('Win%: ' + unrounded.roundToDouble().toString() + "%");
     Player eachPlayer = Player(
         globals.playerStatsNames[i].toString(),
         globals.playerStatWins[i].toString(),
         globals.playerStatLosses[i].toString(),
-        (globals.playerStatWPS[i] * 100).toString());
+        unrounded.roundToDouble().toString());
     players.add(eachPlayer);
   }
 

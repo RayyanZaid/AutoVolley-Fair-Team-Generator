@@ -34,7 +34,7 @@ Future<Map<String, dynamic>> returnStats(String name) async {
   );
 
   Map<String, dynamic> data = json.decode(response.body);
-
+  debugPrint(data["winPercentage"].toString());
   return data;
 }
 
