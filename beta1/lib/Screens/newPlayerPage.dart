@@ -134,7 +134,9 @@ class NewPlayerPageState extends State<NewPlayerPage> {
               onPressed: () async {
                 //validating the form and saving it
                 _savingData();
+                name = name.trim();
 
+                debugPrint(name);
                 bool docExists = await doesExist(name);
 
                 if (!docExists) {
@@ -143,45 +145,28 @@ class NewPlayerPageState extends State<NewPlayerPage> {
                   debugPrint("DOC EXISTS");
                 }
 
-                //url to send the post request to
-                // ignore: prefer_const_declarations
+                bool isTaken = docExists;
 
-                /*
-              A Uri object is usually used to tell a ContentProvider what 
-              we want to access by reference. It is an immutable one-to-one 
-              mapping to a resource or data. The method Uri. parse 
-              creates a new Uri object from a properly formated String
-              */
-                //sending a post request to the url
-                // bool isTaken = false;
-                // final response = await http.post(Uri.parse(url),
-                //     body: json.encode({'name': name, 'isTaken': isTaken}));
-                // final decoded =
-                //     json.decode(response.body) as Map<String, dynamic>;
-                // var nameFromBackEnd = decoded['name'];
-                // bool isTakenFromBackEnd = decoded['isTaken'];
-
-                // var responseMessage =
-                //     nameFromBackEnd + " has been added as a player";
-                // var alert = "Success!!";
-                // var bgColor = Color.fromARGB(255, 42, 185, 42);
-                // if (isTakenFromBackEnd == true) {
-                //   responseMessage = "The name " +
-                //       nameFromBackEnd +
-                //       " has been taken. Enter another name.";
-                //   alert = "Failed!!";
-                //   bgColor = Color.fromARGB(255, 230, 128, 128);
-                // }
+                var responseMessage = name + " has been added as a player";
+                var alert = "Success!!";
+                var bgColor = Color.fromARGB(255, 42, 185, 42);
+                if (isTaken == true) {
+                  responseMessage = "The name " +
+                      name +
+                      " has been taken. Enter another name.";
+                  alert = "Failed!!";
+                  bgColor = Color.fromARGB(255, 230, 128, 128);
+                }
 
                 // // ignore: use_build_context_synchronously
-                // _showDialog(context, responseMessage, alert, bgColor);
-                // await Future.delayed(const Duration(seconds: 2), () {});
+                _showDialog(context, responseMessage, alert, bgColor);
+                await Future.delayed(const Duration(seconds: 2), () {});
 
-                // if (alert == "Success!!") {
-                //   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                //     return MenuOptionsScreen();
-                //   }));
-                // }
+                if (alert == "Success!!") {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return MenuOptionsScreen();
+                  }));
+                }
               },
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),

@@ -43,6 +43,37 @@ double getPlayerWorth(int wins, int losses, double ratio) {
   return worth;
 }
 
+double getAverage(List<double> values) {
+  double sum = 0;
+
+  for (int i = 0; i < values.length; i++) {
+    sum += values[i];
+  }
+
+  return sum / values.length;
+}
+
+// FINISH LATER
+
+void rearrangeTeams(
+    List<String> names1,
+    List<double> worth1,
+    List<String> names2,
+    List<double> worth2,
+    double differenceOfAvgs,
+    bool avg1Ismore) {
+  int numTimesWithoutChange = 0;
+
+  // while (numTimesWithoutChange <= 4 && differenceOfAvgs >= 0) {
+  //   Map<double, double> avgShiftToValueOfWorth;
+
+  //   bool isChanged = false;
+  //   double optimalAverageShift = double.infinity;
+
+  //   for(int i = 0; i < )
+  // }
+}
+
 List<Player> createButtons() {
   List<Player> players = [];
   for (int i = 0; i < globals.playerList.length; i++) {
@@ -236,6 +267,8 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
             debugPrint(globals.team1Names.toString());
             debugPrint(globals.team2Names.toString());
 
+            globals.team1Stats = sortedMap;
+            globals.team2Stats = sortedMap;
             // Azure
 
             // final url = 'https://rayyanzaid.azurewebsites.net/createTeams';

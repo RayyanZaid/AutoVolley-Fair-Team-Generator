@@ -19,6 +19,9 @@ var playerStatWins = [];
 var playerStatLosses = [];
 var playerStatWPS = [];
 
+var team1Stats;
+var team2Stats;
+
 // Old server
 // var localURL = 'https://autovolley.azurewebsites.net';
 
