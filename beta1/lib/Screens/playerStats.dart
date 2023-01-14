@@ -28,10 +28,23 @@ class Player {
   Player(this.strPlayerName, this.wins, this.losses, this.wps);
 // switched order of < and > so that quicksort would work in reverse
   bool operator <(Player other) {
+    double thisWP = double.parse(wps);
+    double otherWP = double.parse(other.wps);
+
+    if (thisWP == otherWP) {
+      return int.parse(wins) > int.parse(other.wins);
+    }
     return double.parse(wps) > double.parse(other.wps);
   }
 
   bool operator >(Player other) {
+    double thisWP = double.parse(wps);
+    double otherWP = double.parse(other.wps);
+
+    if (thisWP == otherWP) {
+      return int.parse(wins) < int.parse(other.wins);
+    }
+
     return double.parse(wps) < double.parse(other.wps);
   }
 }
@@ -95,14 +108,8 @@ class PlayerStatsPageState extends State<PlayerStatsPage> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            alignment: Alignment.topCenter,
-            fit: BoxFit.fill,
-            image: NetworkImage(
-              'https://source.unsplash.com/5nUNdLueQio',
-            ),
-          ),
-        ),
+            image: DecorationImage(
+                image: AssetImage("assets/wood.jpg"), fit: BoxFit.cover)),
         child: ListView.builder(
           itemCount: playerListLocal.length,
           itemBuilder: (BuildContext context, int index) {

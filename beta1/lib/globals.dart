@@ -6,8 +6,8 @@ var playersPlaying;
 List<dynamic> team1Names = [];
 List<dynamic> team2Names = [];
 
-List<dynamic> team1WLRatios = [];
-List<dynamic> team2WLRatios = [];
+List<dynamic> team1winPercentages = [];
+List<dynamic> team2winPercentages = [];
 
 final updatedWinning = List<String>.generate(22, (int index) => '');
 final updatedLosing = List<String>.generate(22, (int index) => '');

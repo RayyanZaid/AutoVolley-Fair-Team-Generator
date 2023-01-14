@@ -17,21 +17,70 @@ class MatchScreenPage extends StatefulWidget {
   MatchScreenPageState createState() => MatchScreenPageState();
 }
 
-void updateData(String name, bool didWin) async {
-  var url;
+void updateDataTeam1(String name, bool didWin) async {
+  var url =
+      'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json';
   if (didWin) {
-    url =
-        'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}/wins.json';
+    globals.team1Stats[name]['wins'] += 1;
   } else {
-    url =
-        'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}/losses.json';
+    globals.team1Stats[name]['losses'] += 1;
   }
-  globals.team1Stats[name]['wins'] += 1;
-  var data = globals.team1Stats[name]['wins'];
-  data = data.toString();
+  var wins = globals.team1Stats[name]['wins'];
+  var losses = globals.team1Stats[name]['losses'];
+  // update win percentage
+  double wp = globals.team1Stats[name]['wins'] /
+      (globals.team1Stats[name]['wins'] + globals.team1Stats[name]['losses']);
+  double winPercentage = (wp * 100).roundToDouble() / 100;
+
+  Map<String, dynamic> data;
+  if (didWin) {
+    data = {"wins": wins, "winPercentage": winPercentage};
+  } else {
+    data = {"losses": losses, "winPercentage": winPercentage};
+  }
+
+  String jsonData = json.encode(data);
+
   var headers = {'Content-Type': 'application/json'};
 
-  var response = await http.put(Uri.parse(url), body: data, headers: headers);
+  var response =
+      await http.patch(Uri.parse(url), body: jsonData, headers: headers);
+
+  if (response.statusCode == 200) {
+    debugPrint("Data updated");
+  } else {
+    debugPrint("Failed");
+  }
+}
+
+void updateDataTeam2(String name, bool didWin) async {
+  var url =
+      'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json';
+  if (didWin) {
+    globals.team2Stats[name]['wins'] += 1;
+  } else {
+    globals.team2Stats[name]['losses'] += 1;
+  }
+  var wins = globals.team2Stats[name]['wins'];
+  var losses = globals.team2Stats[name]['losses'];
+  // update win percentage
+  double wp = globals.team2Stats[name]['wins'] /
+      (globals.team2Stats[name]['wins'] + globals.team2Stats[name]['losses']);
+  double winPercentage = (wp * 100).roundToDouble() / 100;
+
+  Map<String, dynamic> data;
+  if (didWin) {
+    data = {"wins": wins, "winPercentage": winPercentage};
+  } else {
+    data = {"losses": losses, "winPercentage": winPercentage};
+  }
+
+  String jsonData = json.encode(data);
+
+  var headers = {'Content-Type': 'application/json'};
+
+  var response =
+      await http.patch(Uri.parse(url), body: jsonData, headers: headers);
 
   if (response.statusCode == 200) {
     debugPrint("Data updated");
@@ -115,11 +164,8 @@ class MatchScreenPageState extends State<MatchScreenPage> {
       alert = "Team 1 Won!!";
       _showDialog(context, responseMessage, alert, bgColor);
 
-      // UPDATE WINS AND LOSSES ON THE DATABASE
-      for (int i = 0; i < globals.team1Names.length; i++) {
-        String name = globals.team1Names[i];
-        updateData(name, true);
-      }
+      // UPDATE WINS AND LOSSES ON THE DATABASE (and the win percentages)
+
       // RETURN WL Ratios back from database and update frontend
 
     } else if (index == 1) {
@@ -131,21 +177,21 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     }
   }
 
-  void updateWL(
-      List<dynamic> team1WLRatios, List<dynamic> team2WLRatios, bool team1Won) {
+  void updateWL(List<dynamic> team1winPercentages,
+      List<dynamic> team2winPercentages, bool team1Won) {
     if (team1Won) {
-      for (int i = 0; i < team1WLRatios.length; i++) {
-        team1WLRatios[i] = globals.updatedWinning[i];
+      for (int i = 0; i < team1winPercentages.length; i++) {
+        team1winPercentages[i] = globals.updatedWinning[i];
       }
-      for (int i = 0; i < team2WLRatios.length; i++) {
-        team2WLRatios[i] = globals.updatedLosing[i];
+      for (int i = 0; i < team2winPercentages.length; i++) {
+        team2winPercentages[i] = globals.updatedLosing[i];
       }
     } else {
-      for (int i = 0; i < team1WLRatios.length; i++) {
-        team1WLRatios[i] = globals.updatedLosing[i];
+      for (int i = 0; i < team1winPercentages.length; i++) {
+        team1winPercentages[i] = globals.updatedLosing[i];
       }
-      for (int i = 0; i < team2WLRatios.length; i++) {
-        team2WLRatios[i] = globals.updatedWinning[i];
+      for (int i = 0; i < team2winPercentages.length; i++) {
+        team2winPercentages[i] = globals.updatedWinning[i];
       }
     }
   }
@@ -162,8 +208,10 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     teams.add(HeadingItem(''));
     for (int i = 0; i < globals.team1Names.length; i++) {
       String eachName = globals.team1Names[i];
-      String WLRatio = 'W/L: ' + globals.team1WLRatios[i].toString();
-      teams.add(MessageItem(eachName, WLRatio));
+      String winP = ('Win%: ' +
+          (globals.team1Stats[eachName]["winPercentage"] * 100).toString() +
+          "%");
+      teams.add(MessageItem(eachName, winP));
     }
     teams.add(HeadingItem(''));
     teams.add(HeadingItem(''));
@@ -175,11 +223,13 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     teams.add(HeadingItem(''));
     for (int i = 0; i < globals.team2Names.length; i++) {
       String eachName = globals.team2Names[i];
-      String WLRatio = 'W/L: ' + globals.team2WLRatios[i].toString();
-      teams.add(MessageItem(eachName, WLRatio));
+      String winP = ('Win%: ' +
+          (globals.team2Stats[eachName]["winPercentage"] * 100).toString() +
+          "%");
+      teams.add(MessageItem(eachName, winP));
     }
     // if (globals.updatedWinning.isNotEmpty) {
-    //   updateWL(globals.team1WLRatios, globals.team2WLRatios, globals.team1Won);
+    //   updateWL(globals.team1winPercentages, globals.team2winPercentages, globals.team1Won);
     // }
     // double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
@@ -201,14 +251,9 @@ class MatchScreenPageState extends State<MatchScreenPage> {
         ),
         body: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                alignment: Alignment.topCenter,
-                fit: BoxFit.fill,
-                image: NetworkImage(
-                  'https://source.unsplash.com/uIot6M34igU',
-                ),
-              ),
-            ),
+                image: DecorationImage(
+                    image: AssetImage("assets/lightBG.jpg"),
+                    fit: BoxFit.cover)),
             child: ListView.builder(
               padding: EdgeInsets.all(20),
               itemCount: teams.length,
@@ -242,7 +287,14 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                                 i < globals.team1Names.length;
                                 i++) {
                               String name = globals.team1Names[i];
-                              updateData(name, true);
+                              updateDataTeam1(name, true);
+                            }
+
+                            for (int i = 0;
+                                i < globals.team2Names.length;
+                                i++) {
+                              String name = globals.team2Names[i];
+                              updateDataTeam2(name, false);
                             }
                             _showDialog(
                                 context, responseMessage, alert, bgColor);
@@ -276,6 +328,20 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             var bgColor = Color.fromARGB(255, 235, 123, 101);
 
                             alert = "Team 2 Won!!";
+
+                            for (int i = 0;
+                                i < globals.team1Names.length;
+                                i++) {
+                              String name = globals.team1Names[i];
+                              updateDataTeam1(name, false);
+                            }
+
+                            for (int i = 0;
+                                i < globals.team2Names.length;
+                                i++) {
+                              String name = globals.team2Names[i];
+                              updateDataTeam2(name, true);
+                            }
                           },
                           icon: Icon(
                             Icons.ads_click_rounded,

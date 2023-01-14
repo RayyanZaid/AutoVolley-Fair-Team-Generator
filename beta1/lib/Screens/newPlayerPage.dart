@@ -95,8 +95,7 @@ class NewPlayerPageState extends State<NewPlayerPage> {
         width: double.infinity,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/background1.jpeg"),
-                fit: BoxFit.cover)),
+                image: AssetImage("assets/b1.jpeg"), fit: BoxFit.cover)),
         alignment: Alignment.bottomCenter,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,7 +139,8 @@ class NewPlayerPageState extends State<NewPlayerPage> {
                 bool docExists = await doesExist(name);
 
                 if (!docExists) {
-                  addNewPlayer(name, {'wins': 0, 'losses': 0, 'ratio': 0.0});
+                  addNewPlayer(
+                      name, {'wins': 0, 'losses': 0, 'winPercentage': 0.0});
                 } else {
                   debugPrint("DOC EXISTS");
                 }

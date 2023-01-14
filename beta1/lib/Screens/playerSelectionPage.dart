@@ -38,8 +38,8 @@ Future<Map<String, dynamic>> returnStats(String name) async {
   return data;
 }
 
-double getPlayerWorth(int wins, int losses, double ratio) {
-  double worth = ratio * (1 + ((wins - losses) / 25)) + ((wins + losses) / 200);
+double getPlayerWorth(int wins, int losses, double winP) {
+  double worth = winP * (1 + ((wins - losses) / 25)) + ((wins + losses) / 200);
   return worth;
 }
 
@@ -107,7 +107,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
         width: double.infinity,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/b2.jpeg"), fit: BoxFit.cover)),
+                image: AssetImage("assets/wood.jpg"), fit: BoxFit.cover)),
         alignment: Alignment.bottomCenter,
         child: ListView.builder(
           itemCount: playerListLocal.length,
@@ -200,7 +200,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
               int wins = playerToStats[playersPlaying[i]]["wins"];
               int losses = playerToStats[playersPlaying[i]]["losses"];
               double ratio = double.parse(
-                  playerToStats[playersPlaying[i]]["ratio"].toString());
+                  playerToStats[playersPlaying[i]]["winPercentage"].toString());
 
               double worth = getPlayerWorth(wins, losses, ratio);
 
@@ -224,24 +224,24 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
             // Return 2 lists (one for each team)
             globals.team1Names = [];
             globals.team2Names = [];
-            globals.team1WLRatios = [];
-            globals.team2WLRatios = [];
+            globals.team1winPercentages = [];
+            globals.team2winPercentages = [];
 
             for (int i = 0; i < sortedMap.length ~/ 4; i++) {
               globals.team1Names.add(sortedMap.keys.elementAt(i));
               globals.team1Names
                   .add(sortedMap.keys.elementAt(sortedMap.length - i - 1));
-              globals.team1WLRatios
+              globals.team1winPercentages
                   .add(sortedMap[sortedMap.keys.elementAt(i)]!["worth"]);
-              globals.team1WLRatios.add(sortedMap[sortedMap.keys
-                  .elementAt(sortedMap.length - i - 1)]!["ratio"]);
+              globals.team1winPercentages.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length - i - 1)]!["winPercentage"]);
             }
 
             if (sortedMap.length % 2 == 1) {
               globals.team1Names
                   .add(sortedMap.keys.elementAt(sortedMap.length ~/ 2));
-              globals.team1WLRatios.add(sortedMap[
-                  sortedMap.keys.elementAt(sortedMap.length ~/ 2)]!["ratio"]);
+              globals.team1winPercentages.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length ~/ 2)]!["winPercentage"]);
             }
 
             for (int i = sortedMap.length ~/ 4;
@@ -251,17 +251,17 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
                   i == sortedMap.length ~/ 2 - 1 &&
                   sortedMap.length % 4 != 0) {
                 globals.team1Names.add(sortedMap.keys.elementAt(i));
-                globals.team1WLRatios
-                    .add(sortedMap[sortedMap.keys.elementAt(i)]!["ratio"]);
+                globals.team1winPercentages.add(
+                    sortedMap[sortedMap.keys.elementAt(i)]!["winPercentage"]);
               } else {
                 globals.team2Names.add(sortedMap.keys.elementAt(i));
-                globals.team2WLRatios
-                    .add(sortedMap[sortedMap.keys.elementAt(i)]!["ratio"]);
+                globals.team2winPercentages.add(
+                    sortedMap[sortedMap.keys.elementAt(i)]!["winPercentage"]);
               }
               globals.team2Names
                   .add(sortedMap.keys.elementAt(sortedMap.length - i - 1));
-              globals.team2WLRatios.add(sortedMap[sortedMap.keys
-                  .elementAt(sortedMap.length - i - 1)]!["ratio"]);
+              globals.team2winPercentages.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length - i - 1)]!["winPercentage"]);
             }
 
             debugPrint(globals.team1Names.toString());
@@ -279,18 +279,18 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
             // final decoded = json.decode(response.body) as Map<String, dynamic>;
 
             // List<dynamic> team1Names = decoded['team1Names'];
-            // List<dynamic> team1WLRatios = decoded['team1WLRatios'];
+            // List<dynamic> team1winPercentages = decoded['team1winPercentages'];
             // globals.team1Names = team1Names;
-            // globals.team1WLRatios = team1WLRatios;
+            // globals.team1winPercentages = team1winPercentages;
 
             // for (int i = 0; i < team1Names.length; i++) {
             //   debugPrint(team1Names[i].toString());
             // }
 
             // List<dynamic> team2Names = decoded['team2Names'];
-            // List<dynamic> team2WLRatios = decoded['team2WLRatios'];
+            // List<dynamic> team2winPercentages = decoded['team2winPercentages'];
             // globals.team2Names = team2Names;
-            // globals.team2WLRatios = team2WLRatios;
+            // globals.team2winPercentages = team2winPercentages;
 
             // for (int i = 0; i < team2Names.length; i++) {
             //   debugPrint(team2Names[i].toString());

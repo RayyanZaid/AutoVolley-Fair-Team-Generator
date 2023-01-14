@@ -54,14 +54,8 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              alignment: Alignment.topCenter,
-              fit: BoxFit.fill,
-              image: NetworkImage(
-                'https://source.unsplash.com/jAWfDKxRraI',
-              ),
-            ),
-          ),
+              image: DecorationImage(
+                  image: AssetImage("assets/b2.jpeg"), fit: BoxFit.cover)),
           child: ListView.builder(
             itemCount: options.length + 2,
             itemBuilder: (BuildContext context, int index) {
@@ -78,14 +72,9 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                   width: double.infinity,
                   height: 100.0,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      alignment: Alignment.topCenter,
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        'https://source.unsplash.com/M8Y59lwmKAk',
-                      ),
-                    ),
-                  ),
+                      image: DecorationImage(
+                          image: AssetImage("assets/button.jpg"),
+                          fit: BoxFit.cover)),
                   child: ListTile(
                     leading: options[index - 1].icon,
                     title: Text(
@@ -125,14 +114,9 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                   width: double.infinity,
                   height: 100.0,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      alignment: Alignment.topCenter,
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        'https://source.unsplash.com/-t40mnV3vAU',
-                      ),
-                    ),
-                  ),
+                      image: DecorationImage(
+                          image: AssetImage("assets/button.jpg"),
+                          fit: BoxFit.cover)),
                   child: ListTile(
                     leading: options[index - 1].icon,
                     title: Text(
@@ -182,14 +166,9 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                   width: double.infinity,
                   height: 100.0,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      alignment: Alignment.topCenter,
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        'https://source.unsplash.com/Wb63zqJ5gnE',
-                      ),
-                    ),
-                  ),
+                      image: DecorationImage(
+                          image: AssetImage("assets/button.jpg"),
+                          fit: BoxFit.cover)),
                   child: ListTile(
                     leading: options[index - 1].icon,
                     title: Text(
@@ -224,7 +203,7 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                           globals.playerStatsNames.add(key);
                           globals.playerStatWins.add(data[key]['wins']);
                           globals.playerStatLosses.add(data[key]['losses']);
-                          globals.playerStatWPS.add(data[key]['ratio']);
+                          globals.playerStatWPS.add(data[key]['winPercentage']);
                         }
 
                         // sortList(
@@ -251,14 +230,9 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                 width: double.infinity,
                 height: 80.0,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    alignment: Alignment.topCenter,
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      'https://source.unsplash.com/iar-afB0QQw',
-                    ),
-                  ),
-                ),
+                    image: DecorationImage(
+                        image: AssetImage("assets/button.jpg"),
+                        fit: BoxFit.cover)),
                 child: ListTile(
                   leading: options[index - 1].icon,
                   title: Text(
