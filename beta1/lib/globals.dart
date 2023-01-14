@@ -1,23 +1,26 @@
 library my_prj.globals;
 
-var playerList;
+var playerList = [];
 var playersPlaying;
 
 List<dynamic> team1Names = [];
 List<dynamic> team2Names = [];
 
-List<dynamic> team1WLRatios = [];
-List<dynamic> team2WLRatios = [];
+List<dynamic> team1winPercentages = [];
+List<dynamic> team2winPercentages = [];
 
 final updatedWinning = List<String>.generate(22, (int index) => '');
 final updatedLosing = List<String>.generate(22, (int index) => '');
 
 bool team1Won = true;
 
-var playerStatsNames;
-var playerStatWins;
-var playerStatLosses;
-var playerStatWPS;
+var playerStatsNames = [];
+var playerStatWins = [];
+var playerStatLosses = [];
+var playerStatWPS = [];
+
+var team1Stats;
+var team2Stats;
 
 // Old server
 // var localURL = 'https://autovolley.azurewebsites.net';

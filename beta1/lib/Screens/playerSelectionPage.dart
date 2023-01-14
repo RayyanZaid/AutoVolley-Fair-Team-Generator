@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:app_settings/app_settings.dart';
 
@@ -5,6 +7,8 @@ import 'package:beta1/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:beta1/matchScreen.dart';
+
+// RayyanZaid/PlayerSelectionPage
 
 class PlayerSelectionPage extends StatefulWidget {
   const PlayerSelectionPage({Key? key, required this.title}) : super(key: key);
@@ -18,6 +22,56 @@ class Player {
   String strPlayerName;
   var isChosen = false;
   Player(this.strPlayerName);
+
+  // getters
+
+}
+
+Future<Map<String, dynamic>> returnStats(String name) async {
+  http.Response response = await http.get(
+    Uri.parse(
+        'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json'),
+  );
+
+  Map<String, dynamic> data = json.decode(response.body);
+
+  return data;
+}
+
+double getPlayerWorth(int wins, int losses, double winP) {
+  double worth = winP * (1 + ((wins - losses) / 25)) + ((wins + losses) / 200);
+  return worth;
+}
+
+double getAverage(List<double> values) {
+  double sum = 0;
+
+  for (int i = 0; i < values.length; i++) {
+    sum += values[i];
+  }
+
+  return sum / values.length;
+}
+
+// FINISH LATER
+
+void rearrangeTeams(
+    List<String> names1,
+    List<double> worth1,
+    List<String> names2,
+    List<double> worth2,
+    double differenceOfAvgs,
+    bool avg1Ismore) {
+  int numTimesWithoutChange = 0;
+
+  // while (numTimesWithoutChange <= 4 && differenceOfAvgs >= 0) {
+  //   Map<double, double> avgShiftToValueOfWorth;
+
+  //   bool isChanged = false;
+  //   double optimalAverageShift = double.infinity;
+
+  //   for(int i = 0; i < )
+  // }
 }
 
 List<Player> createButtons() {
@@ -52,10 +106,8 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/b2.jpeg"), fit: BoxFit.cover
-          )
-        ),
+            image: DecorationImage(
+                image: AssetImage("assets/wood.jpg"), fit: BoxFit.cover)),
         alignment: Alignment.bottomCenter,
         child: ListView.builder(
           itemCount: playerListLocal.length,
@@ -92,6 +144,7 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
                               ),
                               GestureDetector(
                                 onTap: () {
+                                  debugPrint("Selected");
                                   setState(() {
                                     playerListLocal[index].isChosen =
                                         !playerListLocal[index].isChosen;
@@ -127,35 +180,121 @@ class PlayerSelectionPageState extends State<PlayerSelectionPage> {
           onPressed: () async {
             List<String> playersPlaying = getPlayers();
 
-            // for loop just for debugging
             // for (int i = 0; i < playersPlaying.length; i++) {
             //   debugPrint(playersPlaying[i]);
             // }
 
-            final url = 'https://rayyanzaid.azurewebsites.net/createTeams';
-            final response = await http.post(Uri.parse(url),
-                body: json.encode({'playersPlaying': playersPlaying}));
+            // Send playersPlaying to Firebase to get the player's WL Ratios
 
-            // player objects from the backend
-            final decoded = json.decode(response.body) as Map<String, dynamic>;
+            Map<String, dynamic> playerToStats = {};
 
-            List<dynamic> team1Names = decoded['team1Names'];
-            List<dynamic> team1WLRatios = decoded['team1WLRatios'];
-            globals.team1Names = team1Names;
-            globals.team1WLRatios = team1WLRatios;
-
-            for (int i = 0; i < team1Names.length; i++) {
-              debugPrint(team1Names[i].toString());
+            for (int i = 0; i < playersPlaying.length; i++) {
+              Map<String, dynamic> eachPlayer =
+                  await returnStats(playersPlaying[i]);
+              playerToStats[playersPlaying[i]] = eachPlayer;
             }
 
-            List<dynamic> team2Names = decoded['team2Names'];
-            List<dynamic> team2WLRatios = decoded['team2WLRatios'];
-            globals.team2Names = team2Names;
-            globals.team2WLRatios = team2WLRatios;
+            // Create Algorithm to determine player's worth
 
-            for (int i = 0; i < team2Names.length; i++) {
-              debugPrint(team2Names[i].toString());
+            for (int i = 0; i < playersPlaying.length; i++) {
+              int wins = playerToStats[playersPlaying[i]]["wins"];
+              int losses = playerToStats[playersPlaying[i]]["losses"];
+              double ratio = double.parse(
+                  playerToStats[playersPlaying[i]]["winPercentage"].toString());
+
+              double worth = getPlayerWorth(wins, losses, ratio);
+
+              playerToStats[playersPlaying[i]]["worth"] = worth;
             }
+
+            // Put it into team creater algorithm
+
+            // 1. Sort by worth
+
+            List<String> keys = playerToStats.keys.toList();
+
+// Sort the list of keys based on the values of the inner map
+            keys.sort((k1, k2) => playerToStats[k1]['worth']
+                .compareTo(playerToStats[k2]['worth']));
+
+// Create a new map from the sorted keys
+            Map<String, Map<String, dynamic>> sortedMap = Map.fromIterable(keys,
+                key: (k) => k, value: (k) => playerToStats[k]);
+            // debugPrint(sortedMap.toString());
+            // Return 2 lists (one for each team)
+            globals.team1Names = [];
+            globals.team2Names = [];
+            globals.team1winPercentages = [];
+            globals.team2winPercentages = [];
+
+            for (int i = 0; i < sortedMap.length ~/ 4; i++) {
+              globals.team1Names.add(sortedMap.keys.elementAt(i));
+              globals.team1Names
+                  .add(sortedMap.keys.elementAt(sortedMap.length - i - 1));
+              globals.team1winPercentages
+                  .add(sortedMap[sortedMap.keys.elementAt(i)]!["worth"]);
+              globals.team1winPercentages.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length - i - 1)]!["winPercentage"]);
+            }
+
+            if (sortedMap.length % 2 == 1) {
+              globals.team1Names
+                  .add(sortedMap.keys.elementAt(sortedMap.length ~/ 2));
+              globals.team1winPercentages.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length ~/ 2)]!["winPercentage"]);
+            }
+
+            for (int i = sortedMap.length ~/ 4;
+                i < sortedMap.length ~/ 2;
+                i++) {
+              if (sortedMap.length % 2 == 0 &&
+                  i == sortedMap.length ~/ 2 - 1 &&
+                  sortedMap.length % 4 != 0) {
+                globals.team1Names.add(sortedMap.keys.elementAt(i));
+                globals.team1winPercentages.add(
+                    sortedMap[sortedMap.keys.elementAt(i)]!["winPercentage"]);
+              } else {
+                globals.team2Names.add(sortedMap.keys.elementAt(i));
+                globals.team2winPercentages.add(
+                    sortedMap[sortedMap.keys.elementAt(i)]!["winPercentage"]);
+              }
+              globals.team2Names
+                  .add(sortedMap.keys.elementAt(sortedMap.length - i - 1));
+              globals.team2winPercentages.add(sortedMap[sortedMap.keys
+                  .elementAt(sortedMap.length - i - 1)]!["winPercentage"]);
+            }
+
+            debugPrint(globals.team1Names.toString());
+            debugPrint(globals.team2Names.toString());
+
+            globals.team1Stats = sortedMap;
+            globals.team2Stats = sortedMap;
+            // Azure
+
+            // final url = 'https://rayyanzaid.azurewebsites.net/createTeams';
+            // final response = await http.post(Uri.parse(url),
+            //     body: json.encode({'playersPlaying': playersPlaying}));
+
+            // // player objects from the backend
+            // final decoded = json.decode(response.body) as Map<String, dynamic>;
+
+            // List<dynamic> team1Names = decoded['team1Names'];
+            // List<dynamic> team1winPercentages = decoded['team1winPercentages'];
+            // globals.team1Names = team1Names;
+            // globals.team1winPercentages = team1winPercentages;
+
+            // for (int i = 0; i < team1Names.length; i++) {
+            //   debugPrint(team1Names[i].toString());
+            // }
+
+            // List<dynamic> team2Names = decoded['team2Names'];
+            // List<dynamic> team2winPercentages = decoded['team2winPercentages'];
+            // globals.team2Names = team2Names;
+            // globals.team2winPercentages = team2winPercentages;
+
+            // for (int i = 0; i < team2Names.length; i++) {
+            //   debugPrint(team2Names[i].toString());
+            // }
 
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return MatchScreenPage(

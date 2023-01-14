@@ -4,9 +4,10 @@ import 'package:beta1/Screens/playerSelectionPage.dart';
 
 import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'Screens/successful_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 
 class MatchScreenPage extends StatefulWidget {
   const MatchScreenPage({Key? key, required this.title}) : super(key: key);
@@ -14,6 +15,78 @@ class MatchScreenPage extends StatefulWidget {
 
   @override
   MatchScreenPageState createState() => MatchScreenPageState();
+}
+
+void updateDataTeam1(String name, bool didWin) async {
+  var url =
+      'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json';
+  if (didWin) {
+    globals.team1Stats[name]['wins'] += 1;
+  } else {
+    globals.team1Stats[name]['losses'] += 1;
+  }
+  var wins = globals.team1Stats[name]['wins'];
+  var losses = globals.team1Stats[name]['losses'];
+  // update win percentage
+  double wp = globals.team1Stats[name]['wins'] /
+      (globals.team1Stats[name]['wins'] + globals.team1Stats[name]['losses']);
+  double winPercentage = (wp * 100).roundToDouble() / 100;
+
+  Map<String, dynamic> data;
+  if (didWin) {
+    data = {"wins": wins, "winPercentage": winPercentage};
+  } else {
+    data = {"losses": losses, "winPercentage": winPercentage};
+  }
+
+  String jsonData = json.encode(data);
+
+  var headers = {'Content-Type': 'application/json'};
+
+  var response =
+      await http.patch(Uri.parse(url), body: jsonData, headers: headers);
+
+  if (response.statusCode == 200) {
+    debugPrint("Data updated");
+  } else {
+    debugPrint("Failed");
+  }
+}
+
+void updateDataTeam2(String name, bool didWin) async {
+  var url =
+      'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json';
+  if (didWin) {
+    globals.team2Stats[name]['wins'] += 1;
+  } else {
+    globals.team2Stats[name]['losses'] += 1;
+  }
+  var wins = globals.team2Stats[name]['wins'];
+  var losses = globals.team2Stats[name]['losses'];
+  // update win percentage
+  double wp = globals.team2Stats[name]['wins'] /
+      (globals.team2Stats[name]['wins'] + globals.team2Stats[name]['losses']);
+  double winPercentage = (wp * 100).roundToDouble() / 100;
+
+  Map<String, dynamic> data;
+  if (didWin) {
+    data = {"wins": wins, "winPercentage": winPercentage};
+  } else {
+    data = {"losses": losses, "winPercentage": winPercentage};
+  }
+
+  String jsonData = json.encode(data);
+
+  var headers = {'Content-Type': 'application/json'};
+
+  var response =
+      await http.patch(Uri.parse(url), body: jsonData, headers: headers);
+
+  if (response.statusCode == 200) {
+    debugPrint("Data updated");
+  } else {
+    debugPrint("Failed");
+  }
 }
 
 /// The base class for the different types of items the list can contain.
@@ -85,72 +158,40 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     String alert;
     var bgColor = Color.fromARGB(255, 9, 155, 82);
     globals.team1Won = true;
-    final url = 'https://rayyanzaid.azurewebsites.net/sendResults';
+
     final response;
     if (index == 0) {
       alert = "Team 1 Won!!";
       _showDialog(context, responseMessage, alert, bgColor);
 
-      // UPDATE WINS AND LOSSES ON THE DATABASE
-      response = await http.post(Uri.parse(url),
-          body: json.encode({
-            'winning_team': globals.team1Names,
-            'losing_team': globals.team2Names
-          }));
+      // UPDATE WINS AND LOSSES ON THE DATABASE (and the win percentages)
 
       // RETURN WL Ratios back from database and update frontend
-      final decoded = json.decode(response.body) as Map<String, dynamic>;
-      List<dynamic> winningWLRatios = decoded['updatedWinningWLRatios'];
-      List<dynamic> losingWLRatios = decoded['updatedLosingWLRatios'];
 
-      for (int i = 0; i < winningWLRatios.length; i++) {
-        globals.updatedWinning[i] = winningWLRatios[i].toString();
-      }
-
-      for (int i = 0; i < losingWLRatios.length; i++) {
-        globals.updatedLosing[i] = losingWLRatios[i].toString();
-      }
     } else if (index == 1) {
       alert = "Team 2 Won!!";
       globals.team1Won = false;
       _showDialog(context, responseMessage, alert, bgColor);
-      response = await http.post(Uri.parse(url),
-          body: json.encode({
-            'winning_team': globals.team2Names,
-            'losing_team': globals.team1Names
-          }));
-
-      final decoded = json.decode(response.body) as Map<String, dynamic>;
-      List<dynamic> winningWLRatios = decoded['updatedWinningWLRatios'];
-      List<dynamic> losingWLRatios = decoded['updatedLosingWLRatios'];
-
-      for (int i = 0; i < winningWLRatios.length; i++) {
-        globals.updatedWinning[i] = winningWLRatios[i].toString();
-      }
-
-      for (int i = 0; i < losingWLRatios.length; i++) {
-        globals.updatedLosing[i] = losingWLRatios[i].toString();
-      }
     } else {
       Navigator.pop(context);
     }
   }
 
-  void updateWL(
-      List<dynamic> team1WLRatios, List<dynamic> team2WLRatios, bool team1Won) {
+  void updateWL(List<dynamic> team1winPercentages,
+      List<dynamic> team2winPercentages, bool team1Won) {
     if (team1Won) {
-      for (int i = 0; i < team1WLRatios.length; i++) {
-        team1WLRatios[i] = globals.updatedWinning[i];
+      for (int i = 0; i < team1winPercentages.length; i++) {
+        team1winPercentages[i] = globals.updatedWinning[i];
       }
-      for (int i = 0; i < team2WLRatios.length; i++) {
-        team2WLRatios[i] = globals.updatedLosing[i];
+      for (int i = 0; i < team2winPercentages.length; i++) {
+        team2winPercentages[i] = globals.updatedLosing[i];
       }
     } else {
-      for (int i = 0; i < team1WLRatios.length; i++) {
-        team1WLRatios[i] = globals.updatedLosing[i];
+      for (int i = 0; i < team1winPercentages.length; i++) {
+        team1winPercentages[i] = globals.updatedLosing[i];
       }
-      for (int i = 0; i < team2WLRatios.length; i++) {
-        team2WLRatios[i] = globals.updatedWinning[i];
+      for (int i = 0; i < team2winPercentages.length; i++) {
+        team2winPercentages[i] = globals.updatedWinning[i];
       }
     }
   }
@@ -167,8 +208,10 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     teams.add(HeadingItem(''));
     for (int i = 0; i < globals.team1Names.length; i++) {
       String eachName = globals.team1Names[i];
-      String WLRatio = 'W/L: ' + globals.team1WLRatios[i].toString();
-      teams.add(MessageItem(eachName, WLRatio));
+      String winP = ('Win%: ' +
+          (globals.team1Stats[eachName]["winPercentage"] * 100).toString() +
+          "%");
+      teams.add(MessageItem(eachName, winP));
     }
     teams.add(HeadingItem(''));
     teams.add(HeadingItem(''));
@@ -180,11 +223,13 @@ class MatchScreenPageState extends State<MatchScreenPage> {
     teams.add(HeadingItem(''));
     for (int i = 0; i < globals.team2Names.length; i++) {
       String eachName = globals.team2Names[i];
-      String WLRatio = 'W/L: ' + globals.team2WLRatios[i].toString();
-      teams.add(MessageItem(eachName, WLRatio));
+      String winP = ('Win%: ' +
+          (globals.team2Stats[eachName]["winPercentage"] * 100).toString() +
+          "%");
+      teams.add(MessageItem(eachName, winP));
     }
     // if (globals.updatedWinning.isNotEmpty) {
-    //   updateWL(globals.team1WLRatios, globals.team2WLRatios, globals.team1Won);
+    //   updateWL(globals.team1winPercentages, globals.team2winPercentages, globals.team1Won);
     // }
     // double height = MediaQuery.of(context).size.height;
     // double width = MediaQuery.of(context).size.width;
@@ -206,14 +251,9 @@ class MatchScreenPageState extends State<MatchScreenPage> {
         ),
         body: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(
-                alignment: Alignment.topCenter,
-                fit: BoxFit.fill,
-                image: NetworkImage(
-                  'https://source.unsplash.com/uIot6M34igU',
-                ),
-              ),
-            ),
+                image: DecorationImage(
+                    image: AssetImage("assets/lightBG.jpg"),
+                    fit: BoxFit.cover)),
             child: ListView.builder(
               padding: EdgeInsets.all(20),
               itemCount: teams.length,
@@ -238,37 +278,30 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             String alert;
                             var bgColor = Color.fromARGB(255, 60, 186, 232);
                             globals.team1Won = true;
-                            final url = 'https://rayyanzaid.azurewebsites.net/sendResults';
+
                             final response;
 
                             alert = "Team 1 Won!!";
+
+                            for (int i = 0;
+                                i < globals.team1Names.length;
+                                i++) {
+                              String name = globals.team1Names[i];
+                              updateDataTeam1(name, true);
+                            }
+
+                            for (int i = 0;
+                                i < globals.team2Names.length;
+                                i++) {
+                              String name = globals.team2Names[i];
+                              updateDataTeam2(name, false);
+                            }
                             _showDialog(
                                 context, responseMessage, alert, bgColor);
 
                             // UPDATE WINS AND LOSSES ON THE DATABASE
-                            response = await http.post(Uri.parse(url),
-                                body: json.encode({
-                                  'winning_team': globals.team1Names,
-                                  'losing_team': globals.team2Names
-                                }));
 
                             // RETURN WL Ratios back from database and update frontend
-                            final decoded = json.decode(response.body)
-                                as Map<String, dynamic>;
-                            List<dynamic> winningWLRatios =
-                                decoded['updatedWinningWLRatios'];
-                            List<dynamic> losingWLRatios =
-                                decoded['updatedLosingWLRatios'];
-
-                            for (int i = 0; i < winningWLRatios.length; i++) {
-                              globals.updatedWinning[i] =
-                                  winningWLRatios[i].toString();
-                            }
-
-                            for (int i = 0; i < losingWLRatios.length; i++) {
-                              globals.updatedLosing[i] =
-                                  losingWLRatios[i].toString();
-                            }
                           },
                           icon: Icon(
                             Icons.ads_click_rounded,
@@ -294,33 +327,20 @@ class MatchScreenPageState extends State<MatchScreenPage> {
                             String alert;
                             var bgColor = Color.fromARGB(255, 235, 123, 101);
 
-                            final url = 'https://rayyanzaid.azurewebsites.net/sendResults';
-                            final response;
                             alert = "Team 2 Won!!";
-                            globals.team1Won = false;
-                            _showDialog(
-                                context, responseMessage, alert, bgColor);
-                            response = await http.post(Uri.parse(url),
-                                body: json.encode({
-                                  'winning_team': globals.team2Names,
-                                  'losing_team': globals.team1Names
-                                }));
 
-                            final decoded = json.decode(response.body)
-                                as Map<String, dynamic>;
-                            List<dynamic> winningWLRatios =
-                                decoded['updatedWinningWLRatios'];
-                            List<dynamic> losingWLRatios =
-                                decoded['updatedLosingWLRatios'];
-
-                            for (int i = 0; i < winningWLRatios.length; i++) {
-                              globals.updatedWinning[i] =
-                                  winningWLRatios[i].toString();
+                            for (int i = 0;
+                                i < globals.team1Names.length;
+                                i++) {
+                              String name = globals.team1Names[i];
+                              updateDataTeam1(name, false);
                             }
 
-                            for (int i = 0; i < losingWLRatios.length; i++) {
-                              globals.updatedLosing[i] =
-                                  losingWLRatios[i].toString();
+                            for (int i = 0;
+                                i < globals.team2Names.length;
+                                i++) {
+                              String name = globals.team2Names[i];
+                              updateDataTeam2(name, true);
                             }
                           },
                           icon: Icon(
