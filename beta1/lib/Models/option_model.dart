@@ -36,9 +36,9 @@ final options = [
     title: 'View Player Stats',
     subtitle: 'Wins, Losses, and Win %',
   ),
-  Option(
-    icon: Icon(Icons.invert_colors, size: 40.0, color: Colors.white),
-    title: 'AI Trainer',
-    subtitle: 'Coming Soon',
-  ),
+  // Option(
+  //   icon: Icon(Icons.invert_colors, size: 40.0, color: Colors.white),
+  //   title: 'AI Trainer',
+  //   subtitle: 'Coming Soon',
+  // ),
 ];

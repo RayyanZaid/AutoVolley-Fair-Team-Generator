@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import './Screens/login_screen.dart';
 import './Screens/signup_screen.dart';
 import './Screens/welcome_screen.dart';
+import './Screens/successful_screen.dart';
 import './Models/auth.dart';
 
 void main() async {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreen(),
+      home: MenuOptionsScreen(),
       routes: {
         WelcomeScreen.routeName: (context) => WelcomeScreen(),
         SignupScreen.routeName: (context) => SignupScreen(),
