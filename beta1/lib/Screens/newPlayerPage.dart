@@ -39,12 +39,13 @@ Future<bool> doesExist(String name) async {
         'https://autovolley-85d29-default-rtdb.firebaseio.com/players/${name}.json'),
   );
 
-  Map<String, dynamic> data = json.decode(response.body);
-  if (data == null) {
+  try {
+    Map<String, dynamic> data = json.decode(response.body);
+    return true;
+  } catch (e) {
+    debugPrint('Error: $e');
     return false;
   }
-
-  return true;
 }
 
 void addNewPlayer(String name, Map<String, dynamic> data) async {

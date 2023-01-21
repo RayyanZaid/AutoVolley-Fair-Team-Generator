@@ -9,6 +9,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'playerSelectionPage.dart';
 import 'newPlayerPage.dart';
+import 'deletePlayerPage.dart';
 
 class MenuOptionsScreen extends StatefulWidget {
   @override
@@ -223,7 +224,47 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
                     },
                   ),
                 );
-              } else {}
+              } else {
+                return Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(10.0),
+                  width: double.infinity,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/button.jpg"),
+                          fit: BoxFit.cover)),
+                  child: ListTile(
+                    leading: options[index - 1].icon,
+                    title: Text(
+                      options[index - 1].title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    subtitle: Text(
+                      options[index - 1].subtitle,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
+                    selected: _selectedOption == index - 1,
+                    onTap: () async {
+                      // here
+
+                      debugPrint('Delete Clicked');
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return DeletePlayerPage(
+                          title: 'Delete Player',
+                        );
+                      }));
+                    },
+                  ),
+                );
+              }
               return Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.all(10.0),
@@ -264,14 +305,14 @@ class _MenuOptionsScreenState extends State<MenuOptionsScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                ElevatedButton(
-                    onPressed: () => {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return WelcomeScreen();
-                          }))
-                        },
-                    child: Text('Logout')),
+                // ElevatedButton(
+                //     onPressed: () => {
+                //           Navigator.push(context,
+                //               MaterialPageRoute(builder: (context) {
+                //             return WelcomeScreen();
+                //           }))
+                //         },
+                //     child: Text('Logout')),
               ],
             )));
   }

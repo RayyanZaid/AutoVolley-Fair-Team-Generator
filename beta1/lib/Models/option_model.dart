@@ -36,6 +36,16 @@ final options = [
     title: 'View Player Stats',
     subtitle: 'Wins, Losses, and Win %',
   ),
+  Option(
+    icon: Icon(
+      Icons.delete,
+      size: 40.0,
+      color: Colors.white,
+    ),
+    title: 'Delete Player',
+    subtitle: 'Remove player from the database',
+  ),
+
   // Option(
   //   icon: Icon(Icons.invert_colors, size: 40.0, color: Colors.white),
   //   title: 'AI Trainer',
